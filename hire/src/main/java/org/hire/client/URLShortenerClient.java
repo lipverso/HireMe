@@ -1,6 +1,7 @@
 package org.hire.client;
 
 import org.hire.domain.entity.URLShortenerEntity;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -8,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 public class URLShortenerClient {
-    private static final String BASE_URL = "http://localhost:8080"; // Altere para o endereço correto da sua aplicação
+    private static final String BASE_URL = "http://localhost:8080";
 
     private final RestTemplate restTemplate;
 
@@ -26,7 +27,12 @@ public class URLShortenerClient {
     }
 
     public List<URLShortenerEntity> getTop10MostAccessedUrls() {
-        ResponseEntity<List> response = restTemplate.getForEntity(BASE_URL + "/top-urls", List.class);
+        ResponseEntity<List<URLShortenerEntity>> response = restTemplate.exchange(
+                BASE_URL + "/top-urls",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<URLShortenerEntity>>() {}
+        );
         return response.getBody();
     }
 }

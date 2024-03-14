@@ -1,7 +1,5 @@
 package org.hire.service;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.hire.domain.dto.StatisticsDto;
 import org.hire.domain.dto.URLShortenerDto;
@@ -10,7 +8,6 @@ import org.hire.repository.URLShortenerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -27,19 +24,17 @@ public class URLShortenerService {
     private static final Logger LOGGER = LoggerFactory.getLogger(URLShortenerService.class);
 
     public URLShortenerDto encurtarUrl(String alias, String urlOriginal) {
-        // Inicia a contagem do tempo
+
         long inicioTempo = System.currentTimeMillis();
         String hashUrlEncurtada = alias;
-        // Gera a URL encurtada
+
         if (Objects.isNull(alias) || alias.isEmpty()){
             hashUrlEncurtada = encurtarUrl(urlOriginal);
         }
 
-        // Finaliza a contagem do tempo e calcula o tempo decorrido
         long fimTempo = System.currentTimeMillis();
         double tempoDecorrido = fimTempo - inicioTempo;
 
-        // Cria uma nova entidade URLShortenerEntity
         URLShortenerEntity shorter = new URLShortenerEntity();
         shorter.setAlias(hashUrlEncurtada);
 
@@ -49,15 +44,12 @@ public class URLShortenerService {
 
         shorter.setUrl(getUrlEncurtada(hashUrlEncurtada));
 
-        // Salva a entidade no repositório
         shorter = repository.save(shorter);
 
-        // Cria um objeto StatisticsDto para armazenar o tempo decorrido
         StatisticsDto statisticsDto = new StatisticsDto();
         String tempoDecorridoFormatado = String.format("%.2f ms", tempoDecorrido);
         statisticsDto.setTime_taken(tempoDecorridoFormatado);
 
-        // Cria um objeto URLShortenerDto para retornar
         URLShortenerDto dto = new URLShortenerDto();
         dto.setStatisticsDto(statisticsDto);
         dto.setAlias(shorter.getAlias());
