@@ -10,6 +10,7 @@ import org.hire.repository.URLShortenerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -26,16 +27,11 @@ public class URLShortenerService {
     private static final Logger LOGGER = LoggerFactory.getLogger(URLShortenerService.class);
 
     public URLShortenerDto encurtarUrl(String alias, String urlOriginal) {
-
-        /*if (Objects.nonNull(alias) && repository.existsByAlias(alias)) {
-            throw new RuntimeException("Alias já cadastrado");
-        }*/
-
         // Inicia a contagem do tempo
         long inicioTempo = System.currentTimeMillis();
         String hashUrlEncurtada = alias;
         // Gera a URL encurtada
-        if (Objects.isNull(alias)){
+        if (Objects.isNull(alias) || alias.isEmpty()){
             hashUrlEncurtada = encurtarUrl(urlOriginal);
         }
 

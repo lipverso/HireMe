@@ -27,10 +27,10 @@ public class URLShortenerController {
     public ResponseEntity<String> redirect(@PathVariable String alias) {
         URLShortenerEntity entity = service.getOriginalURL(alias);
 
-        if (Objects.isNull(entity.getUrl())) {
+        if (Objects.isNull(entity)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"ERR_CODE\": \"002\", \"Description\": \"SHORTENED URL NOT FOUND\"}");
         }
-        return ResponseEntity.status(HttpStatus.FOUND).header("Location", entity.getUrl()).build();
+        return ResponseEntity.ok(entity.getUrl());
     }
 
     @GetMapping("/top-urls")
